@@ -67,10 +67,8 @@ class CoursesController < ApplicationController
     if request.post?
       res=[]
       @course.each do |course|
-      if check_course_condition(course, 'course_time', params['course']['cou
-rse_time']) and
-          check_course_condition(course, 'course_type', params['course']['cou
-rse_type']) and
+      if check_course_condition(course, 'course_time', params['course']['course_time']) and
+          check_course_condition(course, 'course_type', params['course']['course_type']) and
           check_course_keyword(course, 'name', params['keyword']) 
          res << course
         end

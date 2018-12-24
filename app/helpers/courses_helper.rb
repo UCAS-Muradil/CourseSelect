@@ -4,19 +4,19 @@ require 'set'
 
     def date_transform(date)
       if date.include?"周一"
-        retutn '1'
+        return '1'
       elsif date.include?"周二" 
-        retutn '2'
+        return '2'
       elsif date.include?"周三" 
-        retutn '3'
+        return '3'
       elsif date.include?"周四" 
-        retutn '4'
+        return '4'
       elsif date.include?"周五" 
-        retutn '5'
+        return '5'
       elsif date.include?"周六" 
-        retutn '6'
+        return '6'
       elsif date.include?"周天" 
-        retutn '7'
+        return '7'
       end
     end
 
@@ -33,13 +33,14 @@ require 'set'
         if value == '' or date_transform(course[key]) == value
           return true
         end
-      elsif value == ' ' or course[key] == value
+      elsif value == '' or course[key] == value
         return true
       end
       false
     end
 
-    def check_course_keyword(course, key, value)      if value == '' or value == nil or course[key].include?value
+    def check_course_keyword(course, key, value)
+      if value == '' or value == nil or course[key].include?value
         return true 
       end
       false
