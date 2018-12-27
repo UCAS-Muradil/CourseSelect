@@ -1,6 +1,7 @@
 class CoursesController < ApplicationController
   include CoursesHelper
-  before_action :student_logged_in, only: [:select, :quit, :list]
+  before_action :student_logged_in, only: [:select, :quit, :list, :scorecount]
+
   before_action :teacher_logged_in, only: [:new, :create, :edit, :destroy, :update, :open, :close]#add open by qiao
   before_action :logged_in, only: :index
 
@@ -91,6 +92,32 @@ class CoursesController < ApplicationController
     flash={:success => "成功退选课程: #{@course.name}"}
     redirect_to courses_path, flash: flash
   end
+
+  def scorecount
+    @course = current_user.courses
+    @grades = current_user.grades
+    @public_required = ''
+    @course.each do |course|
+      if course.course_type == '公共必修课'
+        @public_required << course.name
+      end
+    end
+
+    @get_public_required = ''
+    @grades.each do |grade|
+      if grade.course.course_type == '公共必修课'
+        @get_public_required << grade.course.name
+      end
+    end
+
+    @course_credit = get_course_info(@course, 'credit')
+    @user = current_user
+    @course_score_table = get_course_score_table(@course, @user)
+  end
+
+
+
+
 
 
   #-------------------------for both teachers and students----------------------

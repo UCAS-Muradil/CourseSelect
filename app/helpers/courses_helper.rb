@@ -46,5 +46,45 @@ require 'set'
       false
     end
 
-end
-        
+    def get_course_score_table(courses, user)
+      # 二维数组,表示学分
+      score_table = Array.new(2) { Array.new(3, 0.0) }
+
+      # 遍历用户已经选的课
+      courses.each do |cur|
+        f_credit = cur.credit.split('/')[1].to_f
+        # 课程学分按照类别进行分别计算
+        if cur.course_type == '公共选修课'
+          score_table[0][0] += f_credit
+          if !is_end_course(cur, user)
+            score_table[1][0] += f_credit
+            score_table[1][2] += f_credit
+          end
+        elsif cur.course_type == '公共必修课'
+          if !is_end_course(cur, user)
+            score_table[1][2] += f_credit
+          end
+        elsif cur.course_type.include?'专业' or cur.course_type.include?'一级学科'
+          score_table[0][1] += f_credit
+          if !is_end_course(cur, user)
+            score_table[1][1] += f_credit
+            score_table[1][2] += f_credit
+          end
+        end
+        score_table[0][2] += f_credit
+      end
+      score_table
+    end
+
+    def is_end_course(course, user)
+      @grades = course.grades
+      @is_open = false
+      @grades.each do |grade|
+        if grade.user.name == user.name
+          @is_open == true
+        end
+      end
+      return @is_open
+    end
+
+end       
